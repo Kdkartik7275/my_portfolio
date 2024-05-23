@@ -86,7 +86,9 @@ class ContactSection extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: [
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  js.context.callMethod('open', [SNSLinks.github]);
+                },
                 child: Image.asset(
                   "assets/github.png",
                   width: 28,

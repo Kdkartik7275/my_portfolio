@@ -19,6 +19,9 @@ class _MainDesktopState extends State<MainDesktop>
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
 
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _textOpacityAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +38,18 @@ class _MainDesktopState extends State<MainDesktop>
     _scaleAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.elasticOut,
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.33, curve: Curves.easeIn),
+    ));
+
+    _textOpacityAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.33, curve: Curves.easeIn),
     );
 
     _controller.forward();
@@ -62,24 +77,36 @@ class _MainDesktopState extends State<MainDesktop>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const MainText(textSize: 30),
-              const SizedBox(height: 15),
-              SizedBox(
-                width: 250.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    widget.onNavMenuTap();
-                  },
-                  child: const Text(
-                    "Get in touch",
-                    style: TextStyle(color: CustomColor.whitePrimary),
-                  ),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return FadeTransition(
+                opacity: _textOpacityAnimation,
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: child,
                 ),
-              )
-            ],
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const MainText(textSize: 30),
+                const SizedBox(height: 15),
+                SizedBox(
+                  width: 250.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      widget.onNavMenuTap();
+                    },
+                    child: const Text(
+                      "Get in touch",
+                      style: TextStyle(color: CustomColor.whitePrimary),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           AnimatedBuilder(
             animation: _controller,

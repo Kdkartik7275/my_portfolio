@@ -12,7 +12,7 @@ class MainText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Hi,\nI'm Kartik KD\nA Flutter Developer",
+      "Hi,\nI'm Kartik Dhiman\nA Flutter Developer",
       style: TextStyle(
         fontSize: textSize,
         height: 1.5,
